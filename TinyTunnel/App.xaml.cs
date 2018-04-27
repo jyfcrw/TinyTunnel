@@ -8,15 +8,15 @@ namespace TinyTunnel
     /// </summary>
     public partial class App : Application
     {
+        public static string TempDir = "TinyTunnelTemp";
+
         void App_Startup(object sender, StartupEventArgs e)
         {
             LoadResourceDll.RegistDLL();
 
-            if (!File.Exists("plink.exe")) { 
-                var stream = File.Create("plink.exe");
-                var data = TinyTunnel.Properties.Resources.plink;
-                stream.Write(data, 0, data.Length);
-                stream.Close();
+            if (!Directory.Exists(TempDir))
+            {
+                Directory.CreateDirectory(TempDir);
             }
 
             MainWindow mainWindow = new MainWindow();

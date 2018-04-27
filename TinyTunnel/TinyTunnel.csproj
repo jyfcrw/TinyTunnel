@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\plink.app" />
+    <None Include="Resources\puttygen.app" />
     <None Include="Resources\SharpConfig.dll" />
   </ItemGroup>
   <ItemGroup>

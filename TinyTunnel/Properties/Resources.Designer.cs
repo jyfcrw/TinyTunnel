@@ -93,6 +93,16 @@ namespace TinyTunnel.Properties {
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
+        internal static byte[] puttygen {
+            get {
+                object obj = ResourceManager.GetObject("puttygen", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
         internal static byte[] SharpConfig {
             get {
                 object obj = ResourceManager.GetObject("SharpConfig", resourceCulture);
