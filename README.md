@@ -2,7 +2,7 @@
 A simple windows SSH tunnel base on PuTTY and Plink
 
 ## Download
-[TinyTunnel-1.0.0](https://raw.github.com/jyfcrw/TinyTunnel/master/Dist/TinyTunnel-1.0.0.zip) (SHA1: C19A2829FB02B41427A710A46A99D34CAE2B63B2)
+[TinyTunnel-1.1.0](https://raw.github.com/jyfcrw/TinyTunnel/master/Dist/TinyTunnel-1.1.0.zip) (SHA1: 050AF51D920F5DB6E2A11704EF170B4F4F2CE6FE)
 
 ## How To Use
 1. Run _TinyTunnel.exe_, click _Gen_ button to generate a RSA private key if you don't have any ppk file, upload public key to your remote server, then save private key as a ppk file named _private.ppk_ to the _TinyTunnelTemp_ auto-created folder next to _TinyTunnel.exe_.
