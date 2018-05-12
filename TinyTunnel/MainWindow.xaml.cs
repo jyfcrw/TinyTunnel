@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Threading;
 using System.IO;
 
 namespace TinyTunnel
@@ -108,18 +109,23 @@ namespace TinyTunnel
                     return;
                 }
 
-                test_tunnel();
-                start_tunnel();
-                startButton.Content = "Close";
+                if (test_tunnel())
+                {
+                    start_tunnel();
+                }
+                else
+                {
+                    notifyIcon.ShowBalloonTip(5000, "Tunnel connect test failed!", 
+                        "Can not connect to tunnel, please check your remote host and local configuration.", ToolTipIcon.Error);
+                }
             }
             else
             {
                 close_tunnel();
-                startButton.Content = "Start";
             }
         }
 
-        private void test_tunnel()
+        private bool test_tunnel()
         {
             var section = config["General"];
             string remoteHost = section["RemoteHost"].StringValue;
@@ -142,6 +148,7 @@ namespace TinyTunnel
 
             process.StartInfo.Arguments = String.Join(" ", args);
             process.Start();
+            return process.WaitForExit(30 * 1000);
         }
 
         private void start_tunnel()
@@ -153,7 +160,7 @@ namespace TinyTunnel
             int remotePort = section["RemotePort"].IntValue;
             string privateFilePath = section["PrivateFilePath"].StringValue;
 
-
+            
             tunnel = new Process();
             tunnel.StartInfo = new ProcessStartInfo("plink.exe");
             tunnel.StartInfo.CreateNoWindow = true;
@@ -188,17 +195,19 @@ namespace TinyTunnel
                 isRunning = true;
                 notifyIcon.Icon = Properties.Resources.logo;
                 this.Icon = new BitmapImage(new Uri("pack://application:,,,/Resources/logo.ico", UriKind.Absolute));
+                this.startButton.Content = "Close";
             }
             else
             {
-                notifyIcon.ShowBalloonTip(3000, "Warning", "Failed to start a new tunnel!", ToolTipIcon.Warning);
+                notifyIcon.ShowBalloonTip(3000, "Warning", "Failed to start a new tunnel process!", ToolTipIcon.Warning);
                 close_tunnel();
-                startButton.Content = "Start";
             }
         }
 
         private void close_tunnel()
         {
+            isRunning = false;
+
             if (tunnel != null)
             {
                 try
@@ -212,16 +221,23 @@ namespace TinyTunnel
 
                 tunnel.Dispose();
             }
-            isRunning = false;
+
             notifyIcon.Icon = Properties.Resources.logo_gray;
             this.Icon = new BitmapImage(new Uri("pack://application:,,,/Resources/logo_gray.ico", UriKind.Absolute));
+            this.startButton.Content = "Start";
         }
 
         private void tunnel_Exited(object sender, EventArgs e)
         {
-            close_tunnel();
-            notifyIcon.ShowBalloonTip(3000, "Warning", "Tunnel close abnormally, start again.", ToolTipIcon.Warning);
-            start_tunnel();
+            tunnel.Dispose();
+            tunnel = null;
+            this.Dispatcher.Invoke(new Action(delegate
+            {
+                if (isRunning)
+                    notifyIcon.ShowBalloonTip(3000, "Warning", "Tunnel is disconnected, please check your network.", ToolTipIcon.Warning);
+
+                close_tunnel();
+            }));
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
