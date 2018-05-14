@@ -1,8 +1,8 @@
 # TinyTunnel
-A simple windows SSH tunnel base on PuTTY and Plink
+A simple windows SSH tunnel base on PuTTY and Plink, HTTP proxy supported!
 
 ## Download
-[TinyTunnel-1.1.0](https://raw.github.com/jyfcrw/TinyTunnel/master/Dist/TinyTunnel-1.1.0.zip) (SHA1: 97F2B59370153A6DF15C218B21A85CBF9875CE2D)
+[TinyTunnel-1.2.0](https://raw.github.com/jyfcrw/TinyTunnel/master/Dist/TinyTunnel-1.2.0.zip) (SHA1: 87D3B2C37C75C3378DD4D460C519E55725A4AC01)
 
 ## How To Use
 1. Run _TinyTunnel.exe_, click _Gen_ button to generate a RSA private key if you don't have any ppk file, upload public key to your remote server, then save private key as a ppk file named _private.ppk_ to the _TinyTunnelTemp_ auto-created folder next to _TinyTunnel.exe_.
