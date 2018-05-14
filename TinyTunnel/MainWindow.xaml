@@ -5,20 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TinyTunnel"
         mc:Ignorable="d"
-        Title="Tiny Tunnel" Height="248.534" Width="268.784" ResizeMode="CanMinimize" Closing="Window_Closing" StateChanged="Window_StateChanged">
+        Title="Tiny Tunnel" Height="293.868" Width="268.784" ResizeMode="CanMinimize" Closing="Window_Closing" StateChanged="Window_StateChanged">
     <Grid Margin="0,0,-1,9">
-        <Label x:Name="label" Content="Port" HorizontalAlignment="Left" Margin="190,9,0,0" VerticalAlignment="Top" FontSize="11"/>
-        <TextBox x:Name="localPortTextBox" HorizontalAlignment="Left" Height="23" Margin="194,31,0,0" TextWrapping="Wrap" Text="7070" VerticalAlignment="Top" Width="52"/>
-        <Label x:Name="label1" Content="Remote Host" HorizontalAlignment="Left" Margin="11,61,0,0" VerticalAlignment="Top" FontSize="11"/>
-        <TextBox x:Name="remoteHostTextBox" HorizontalAlignment="Left" Height="23" Margin="16,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
-        <Label x:Name="label2" Content="Local Host" HorizontalAlignment="Left" Margin="11,9,0,0" VerticalAlignment="Top" FontSize="11"/>
-        <TextBox x:Name="localHostTextBox" HorizontalAlignment="Left" Height="23" Margin="16,31,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="167"/>
-        <Label x:Name="label_Copy" Content="Port" HorizontalAlignment="Left" Margin="189,61,0,0" VerticalAlignment="Top" FontSize="11"/>
-        <TextBox x:Name="remotePortTextBox" HorizontalAlignment="Left" Height="23" Margin="194,83,0,0" TextWrapping="Wrap" Text="22" VerticalAlignment="Top" Width="52"/>
-        <Label x:Name="label3_Copy" Content="Private File Path" HorizontalAlignment="Left" Margin="12,115,0,0" VerticalAlignment="Top" FontSize="11"/>
-        <TextBox x:Name="privateFilePathTextBox" HorizontalAlignment="Left" Height="23" Margin="16,139,0,0" TextWrapping="Wrap" Text="private.ppk" VerticalAlignment="Top" Width="188"/>
-        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" Margin="16,177,0,0" VerticalAlignment="Top" Width="230" Height="23" Click="start_button_Click"/>
-        <Button x:Name="generatePrivateKeyButton" Content="Gen" HorizontalAlignment="Left" Margin="214,139,0,0" VerticalAlignment="Top" Width="32" Height="23" Click="generatePrivateKeyButton_Click"/>
+        <Label x:Name="label" Content="Port" HorizontalAlignment="Left" Margin="190,117,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <TextBox x:Name="localPortTextBox" HorizontalAlignment="Left" Height="23" Margin="194,139,0,0" TextWrapping="Wrap" Text="7070" VerticalAlignment="Top" Width="52"/>
+        <Label x:Name="label1" Content="Remote Host" HorizontalAlignment="Left" Margin="11,7,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <TextBox x:Name="remoteHostTextBox" HorizontalAlignment="Left" Height="23" Margin="16,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <Label x:Name="label2" Content="SOCKS5 Proxy Host" HorizontalAlignment="Left" Margin="11,117,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <TextBox x:Name="localHostTextBox" HorizontalAlignment="Left" Height="23" Margin="16,139,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="167"/>
+        <Label x:Name="label_Copy" Content="Port" HorizontalAlignment="Left" Margin="189,7,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <TextBox x:Name="remotePortTextBox" HorizontalAlignment="Left" Height="23" Margin="194,29,0,0" TextWrapping="Wrap" Text="22" VerticalAlignment="Top" Width="52"/>
+        <Label x:Name="label3_Copy" Content="Private File Path" HorizontalAlignment="Left" Margin="11,60,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <TextBox x:Name="privateFilePathTextBox" HorizontalAlignment="Left" Height="23" Margin="16,84,0,0" TextWrapping="Wrap" Text="private.ppk" VerticalAlignment="Top" Width="188"/>
+        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" Margin="16,228,0,0" VerticalAlignment="Top" Width="230" Height="23" Click="start_button_Click"/>
+        <Button x:Name="generatePrivateKeyButton" Content="Gen" HorizontalAlignment="Left" Margin="214,84,0,0" VerticalAlignment="Top" Width="32" Height="23" Click="generatePrivateKeyButton_Click"/>
+        <Label x:Name="label1_Copy" Content="HTTP Proxy Host" HorizontalAlignment="Left" Margin="11,170,0,0" VerticalAlignment="Top" FontSize="11" Width="102"/>
+        <TextBox x:Name="httpHostTextBox" HorizontalAlignment="Left" Height="23" Margin="16,192,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="167" Text="127.0.0.1"/>
+        <Label x:Name="label_Copy1" Content="Port" HorizontalAlignment="Left" Margin="189,170,0,0" VerticalAlignment="Top" FontSize="11"/>
+        <TextBox x:Name="httpPortTextBox" HorizontalAlignment="Left" Height="23" Margin="194,192,0,0" TextWrapping="Wrap" Text="7080" VerticalAlignment="Top" Width="52"/>
 
     </Grid>
 </Window>

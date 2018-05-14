@@ -106,6 +106,7 @@
     <Resource Include="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\cow.app" />
     <None Include="Resources\plink.app" />
     <None Include="Resources\puttygen.app" />
     <None Include="Resources\SharpConfig.dll" />

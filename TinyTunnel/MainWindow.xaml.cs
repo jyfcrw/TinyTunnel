@@ -17,6 +17,7 @@ namespace TinyTunnel
     {
         private bool isRunning = false;
         private Process tunnel;
+        private Process httpProxy;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private SharpConfig.Configuration config = new SharpConfig.Configuration();
         private const string ConfigFileName = "config.ini";
@@ -29,11 +30,20 @@ namespace TinyTunnel
             {
                 config = SharpConfig.Configuration.LoadFromFile(App.TempDir + "\\" + ConfigFileName);
                 var section = config["General"];
-                localHostTextBox.Text = section["LocalHost"].StringValue;
-                localPortTextBox.Text = section["LocalPort"].IntValue.ToString();
-                remoteHostTextBox.Text = section["RemoteHost"].StringValue;
-                remotePortTextBox.Text = section["RemotePort"].IntValue.ToString();
-                privateFilePathTextBox.Text = section["PrivateFilePath"].StringValue;
+                if (section.Contains("LocalHost") && !String.IsNullOrEmpty(section["LocalHost"].StringValue.Trim()))
+                    localHostTextBox.Text = section["LocalHost"].StringValue;
+                if (section.Contains("LocalPort") && section["LocalPort"].IntValue > 0)
+                    localPortTextBox.Text = section["LocalPort"].IntValue.ToString();
+                if (section.Contains("HttpHost") && !String.IsNullOrEmpty(section["HttpHost"].StringValue.Trim()))
+                    httpHostTextBox.Text = section["HttpHost"].StringValue;
+                if (section.Contains("HttpPort") && section["HttpPort"].IntValue > 0)
+                    httpPortTextBox.Text = section["HttpPort"].IntValue.ToString();
+                if (section.Contains("RemoteHost") && !String.IsNullOrEmpty(section["RemoteHost"].StringValue.Trim()))
+                    remoteHostTextBox.Text = section["RemoteHost"].StringValue;
+                if (section.Contains("RemotePort") && section["RemotePort"].IntValue > 0)
+                    remotePortTextBox.Text = section["RemotePort"].IntValue.ToString();
+                if (section.Contains("PrivateFilePath") && !String.IsNullOrEmpty(section["PrivateFilePath"].StringValue.Trim()))
+                    privateFilePathTextBox.Text = section["PrivateFilePath"].StringValue;
             }
             catch
             {
@@ -87,6 +97,8 @@ namespace TinyTunnel
                 var section = config["General"];
                 section["LocalHost"].StringValue = localHostTextBox.Text.Trim();
                 section["LocalPort"].IntValue = (int.TryParse(localPortTextBox.Text, out tmpInt)) ? tmpInt : 7070;
+                section["HttpHost"].StringValue = httpHostTextBox.Text.Trim();
+                section["HttpPort"].IntValue = (int.TryParse(httpPortTextBox.Text, out tmpInt)) ? tmpInt : 7080;
                 section["RemoteHost"].StringValue = remoteHostTextBox.Text.Trim();
                 section["RemotePort"].IntValue = (int.TryParse(remotePortTextBox.Text, out tmpInt)) ? tmpInt : 22;
                 section["PrivateFilePath"].StringValue = privateFilePathTextBox.Text.Trim();
@@ -107,6 +119,24 @@ namespace TinyTunnel
                     notifyIcon.ShowBalloonTip(5000, section["PrivateFilePath"].StringValue + " not found",
                         "Please click \"Gen\" to generate a private key file and save it to (" + privateFilePath + ")", ToolTipIcon.Info);
                     return;
+                }
+
+                string cowPath = App.TempDir + "\\" + "cow.exe";
+                if (!File.Exists(cowPath))
+                {
+                    var stream = File.Create(cowPath);
+                    var data = TinyTunnel.Properties.Resources.cow;
+                    stream.Write(data, 0, data.Length);
+                    stream.Close();
+                }
+
+                string cowRcPath = App.TempDir + "\\" + "rc.txt";
+                {
+                    var writer = new StreamWriter(cowRcPath, false);
+                    writer.WriteLine(String.Format("listen = http://{0}:{1}", section["HttpHost"].StringValue, section["HttpPort"].StringValue));
+                    writer.WriteLine(String.Format("proxy = socks5://{0}:{1}", section["LocalHost"].StringValue, section["LocalPort"].StringValue));
+                    writer.Flush();
+                    writer.Close();
                 }
 
                 if (test_tunnel())
@@ -181,10 +211,17 @@ namespace TinyTunnel
 
             tunnel.StartInfo.Arguments = String.Join(" ", args);
 
+            httpProxy = new Process();
+            httpProxy.StartInfo = new ProcessStartInfo("cow.exe");
+            httpProxy.StartInfo.CreateNoWindow = true;
+            //httpProxy.StartInfo.UseShellExecute = false;
+            httpProxy.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            httpProxy.StartInfo.WorkingDirectory = App.TempDir;
+
             bool started = false;
             try
             {
-                started = tunnel.Start();
+                started = tunnel.Start() && httpProxy.Start();
             }
             catch
             {
@@ -214,12 +251,24 @@ namespace TinyTunnel
                 {
                     if (!tunnel.HasExited)
                         tunnel.Kill();
+                    tunnel.Dispose();
                 }
                 catch
                 {
                 }
+            }
 
-                tunnel.Dispose();
+            if (httpProxy !=null)
+            {
+                try
+                {
+                    if (!httpProxy.HasExited)
+                        httpProxy.Kill();
+                    httpProxy.Dispose();
+                }
+                catch
+                {
+                }
             }
 
             notifyIcon.Icon = Properties.Resources.logo_gray;
