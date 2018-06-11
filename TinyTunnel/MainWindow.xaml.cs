@@ -166,10 +166,11 @@ namespace TinyTunnel
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.WorkingDirectory = App.TempDir;
 
             List<string> args = new List<string>()
             {
-                "/C", "echo y" , "|", "plink.exe", "-ssh", "-v",
+                "/C", "echo y" , "|", ".\\plink.exe", "-ssh", "-v",
                 String.Format("-i {0}", privateFilePath),
                 String.Format("-P {0}", remotePort),
                 remoteHost,
